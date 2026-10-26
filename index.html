@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề Ôn Tập Toán 9 - Bài 9</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax CDN for LaTeX Rendering -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .latex-content {
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800 flex flex-col font-sans">
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white py-6 shadow-md">
+        <div class="max-w-4xl mx-auto px-4">
+            <h1 class="text-2xl sm:text-3xl font-bold text-center">ĐỀ ÔN TẬP TOÁN 9 - BÀI 9</h1>
+            <p class="text-center text-indigo-100 mt-2">Biến đổi đơn giản và rút gọn biểu thức chứa căn thức bậc hai</p>
+            <div class="mt-4 flex flex-wrap justify-center gap-4 text-sm font-medium">
+                <span class="bg-indigo-700 px-3 py-1 rounded-full">Mức độ: Biết & Thông hiểu</span>
+                <span class="bg-indigo-700 px-3 py-1 rounded-full">Thời gian: 45 phút</span>
+                <span class="bg-indigo-700 px-3 py-1 rounded-full">Cấu trúc: 3 Dạng thức</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-8 flex-grow w-full">
+
+        <!-- Student Info Card -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">Họ và tên học sinh:</label>
+                    <input type="text" id="studentName" placeholder="Nhập họ tên..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">Lớp:</label>
+                    <input type="text" id="studentClass" placeholder="Nhập tên lớp..." class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+        </div>
+
+        <form id="quizForm">
+
+            <!-- PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN -->
+            <section class="mb-10">
+                <div class="border-b-2 border-indigo-600 pb-2 mb-6">
+                    <h2 class="text-xl font-bold text-indigo-900">PHẦN I: TRẮC NGHIỆM NHIỀU LỰA CHỌN (10 Câu)</h2>
+                    <p class="text-sm text-slate-500">Mỗi câu hỏi chỉ chọn một đáp án đúng duy nhất.</p>
+                </div>
+
+                <div id="part1Container" class="space-y-6">
+                    <!-- Dynamic Part 1 Questions -->
+                </div>
+            </section>
+
+            <!-- PHẦN II: TRẮC NGHIỆM ĐÚNG / SAI -->
+            <section class="mb-10">
+                <div class="border-b-2 border-indigo-600 pb-2 mb-6">
+                    <h2 class="text-xl font-bold text-indigo-900">PHẦN II: TRẮC NGHIỆM ĐÚNG / SAI (4 Câu)</h2>
+                    <p class="text-sm text-slate-500">Trong mỗi ý a), b), c), d) ở mỗi câu, học sinh chọn Đúng hoặc Sai.</p>
+                </div>
+
+                <div id="part2Container" class="space-y-8">
+                    <!-- Dynamic Part 2 Questions -->
+                </div>
+            </section>
+
+            <!-- PHẦN III: TRẢ LỜI NGẮN -->
+            <section class="mb-10">
+                <div class="border-b-2 border-indigo-600 pb-2 mb-6">
+                    <h2 class="text-xl font-bold text-indigo-900">PHẦN III: TRẢ LỜI NGẮN (5 Câu)</h2>
+                    <p class="text-sm text-slate-500">Điền kết quả số/biểu thức thu gọn vào ô trống tương ứng.</p>
+                </div>
+
+                <div id="part3Container" class="space-y-6">
+                    <!-- Dynamic Part 3 Questions -->
+                </div>
+            </section>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-center gap-4 py-6">
+                <button type="button" onclick="submitQuiz()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-xl shadow-lg transition duration-200">
+                    Nộp Bài & Xem Kết Quả
+                </button>
+                <button type="button" onclick="resetForm()" class="bg-slate-500 hover:bg-slate-600 text-white font-semibold py-3 px-6 rounded-xl shadow transition duration-200">
+                    Làm Lại
+                </button>
+            </div>
+        </form>
+
+        <!-- Result Section (Hidden by Default) -->
+        <div id="resultModal" class="hidden bg-white p-8 rounded-2xl shadow-xl border border-indigo-100 mb-12">
+            <h2 class="text-2xl font-bold text-center text-slate-800 mb-4">KẾT QUẢ BÀI LÀM</h2>
+            <div class="flex justify-center items-center gap-6 mb-6">
+                <div class="text-center p-4 bg-indigo-50 rounded-xl border border-indigo-100">
+                    <span class="block text-3xl font-extrabold text-indigo-600" id="scoreDisplay">0 / 10</span>
+                    <span class="text-xs font-semibold text-indigo-800 uppercase tracking-wider">Điểm Số Quy Đổi</span>
+                </div>
+                <div class="text-center p-4 bg-emerald-50 rounded-xl border border-emerald-100">
+                    <span class="block text-3xl font-extrabold text-emerald-600" id="correctCountDisplay">0 / 19</span>
+                    <span class="text-xs font-semibold text-emerald-800 uppercase tracking-wider">Số Câu Đúng</span>
+                </div>
+            </div>
+            <div id="feedbackContainer" class="p-4 bg-slate-50 rounded-lg text-sm text-slate-700 space-y-2"></div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-400 py-6 text-center text-sm">
+        <p>Tài liệu Ôn tập Toán 9 - Bài 9 | Chương trình SGK Mới</p>
+    </footer>
+
+    <!-- JavaScript Data and Controller -->
+    <script>
+        const part1Data = [
+            {
+                id: "p1_1",
+                question: "Cho $a \\ge 0$ và $b \\ge 0$. Khẳng định nào sau đây là đúng?",
+                options: [
+                    "$\\sqrt{a^2 b} = a\\sqrt{b}$",
+                    "$\\sqrt{a^2 b} = b\\sqrt{a}$",
+                    "$\\sqrt{a^2 b} = -a\\sqrt{b}$",
+                    "$\\sqrt{a^2 b} = a^2\\sqrt{b}$"
+                ],
+                correct: 0,
+                explanation: "Áp dụng công thức đưa thừa số ra ngoài dấu căn: với $a \\ge 0, b \\ge 0$ thì $\\sqrt{a^2 b} = |a|\\sqrt{b} = a\\sqrt{b}$."
+            },
+            {
+                id: "p1_2",
+                question: "Đưa thừa số ra ngoài dấu căn của biểu thức $\\sqrt{18}$ ta được kết quả là:",
+                options: [
+                    "$9\\sqrt{2}$",
+                    "$2\\sqrt{3}$",
+                    "$3\\sqrt{2}$",
+                    "$6\\sqrt{3}$"
+                ],
+                correct: 2,
+                explanation: "Ta có $\\sqrt{18} = \\sqrt{3^2 \\cdot 2} = 3\\sqrt{2}$."
+            },
+            {
+                id: "p1_3",
+                question: "Cho $a < 0$. Khẳng định nào sau đây là đúng?",
+                options: [
+                    "$a\\sqrt{3} = \\sqrt{3a^2}$",
+                    "$a\\sqrt{3} = -\\sqrt{3a^2}$",
+                    "$a\\sqrt{3} = \\sqrt{-3a}$",
+                    "$a\\sqrt{3} = -\\sqrt{3a}$"
+                ],
+                correct: 1,
+                explanation: "Vì $a < 0$ nên khi đưa $a$ vào trong dấu căn ta giữ dấu âm ở ngoài: $a\\sqrt{3} = -\\sqrt{a^2 \\cdot 3} = -\\sqrt{3a^2}$."
+            },
+            {
+                id: "p1_4",
+                question: "Khử mẫu của biểu thức lấy căn $\\sqrt{\\frac{2}{3}}$ thu được kết quả là:",
+                options: [
+                    "$\\frac{\\sqrt{6}}{3}$",
+                    "$\\frac{\\sqrt{2}}{3}$",
+                    "$\\frac{2}{3}$",
+                    "$\\sqrt{6}$"
+                ],
+                correct: 0,
+                explanation: "$\\sqrt{\\frac{2}{3}} = \\sqrt{\\frac{2 \\cdot 3}{3^2}} = \\frac{\\sqrt{6}}{3}$."
+            },
+            {
+                id: "p1_5",
+                question: "Biểu thức liên hợp của mẫu trong biểu thức $\\frac{2}{\\sqrt{5} - 1}$ là:",
+                options: [
+                    "$\\sqrt{5} - 1$",
+                    "$\\sqrt{5} + 1$",
+                    "1 - $\\sqrt{5}$",
+                    "2(\\sqrt{5} + 1)"
+                ],
+                correct: 1,
+                explanation: "Mẫu số có dạng $\\sqrt{A} - B$ nên biểu thức liên hợp là $\\sqrt{A} + B$, tức là $\\sqrt{5} + 1$."
+            },
+            {
+                id: "p1_6",
+                question: "Trục căn thức ở mẫu của biểu thức $\\frac{6}{\\sqrt{3}}$ ta được kết quả là:",
+                options: [
+                    "$2$",
+                    "$3\\sqrt{3}$",
+                    "$2\\sqrt{3}$",
+                    "$\\sqrt{3}$"
+                ],
+                correct: 2,
+                explanation: "$\\frac{6}{\\sqrt{3}} = \\frac{6\\sqrt{3}}{3} = 2\\sqrt{3}$."
+            },
+            {
+                id: "p1_7",
+                question: "Kết quả của phép tính $\\sqrt{12} - \\sqrt{3}$ là:",
+                options: [
+                    "$\\sqrt{9}$",
+                    "$\\sqrt{3}$",
+                    "$3$",
+                    "$2\\sqrt{3}$"
+                ],
+                correct: 1,
+                explanation: "$\\sqrt{12} - \\sqrt{3} = 2\\sqrt{3} - \\sqrt{3} = \\sqrt{3}$."
+            },
+            {
+                id: "p1_8",
+                question: "Trục căn thức ở mẫu của biểu thức $\\frac{4}{\\sqrt{5} + 1}$ ta được kết quả là:",
+                options: [
+                    "$\\sqrt{5} - 1$",
+                    "$\\sqrt{5} + 1$",
+                    "$4(\\sqrt{5} - 1)$",
+                    "$\\frac{\\sqrt{5} - 1}{4}$"
+                ],
+                correct: 0,
+                explanation: "$\\frac{4}{\\sqrt{5} + 1} = \\frac{4(\\sqrt{5} - 1)}{5 - 1} = \\frac{4(\\sqrt{5} - 1)}{4} = \\sqrt{5} - 1$."
+            },
+            {
+                id: "p1_9",
+                question: "Đưa thừa số vào trong dấu căn của biểu thức $2\\sqrt{5}$ thu được:",
+                options: [
+                    "$\\sqrt{10}$",
+                    "$\\sqrt{20}$",
+                    "$\\sqrt{50}$",
+                    "$\\sqrt{100}$"
+                ],
+                correct: 1,
+                explanation: "$2\\sqrt{5} = \\sqrt{2^2 \\cdot 5} = \\sqrt{4 \\cdot 5} = \\sqrt{20}$."
+            },
+            {
+                id: "p1_10",
+                question: "Rút gọn biểu thức $P = \\sqrt{8} - 2\\sqrt{2} + \\sqrt{50}$ ta được kết quả là:",
+                options: [
+                    "$5\\sqrt{2}$",
+                    "$3\\sqrt{2}$",
+                    "$7\\sqrt{2}$",
+                    "$2\\sqrt{2}$"
+                ],
+                correct: 0,
+                explanation: "$P = 2\\sqrt{2} - 2\\sqrt{2} + 5\\sqrt{2} = 5\\sqrt{2}$."
+            }
+        ];
+
+        const part2Data = [
+            {
+                id: "p2_1",
+                title: "Cho các biểu thức chứa căn thức bậc hai $A = \\sqrt{27}$, $B = -3\\sqrt{2}$, $C = \\sqrt{\\frac{5}{9}}$.",
+                items: [
+                    { key: "a", text: "Bằng cách đưa thừa số ra ngoài dấu căn, ta có $A = 3\\sqrt{3}$.", correct: true, exp: "Đúng, $\\sqrt{27} = 3\\sqrt{3}$." },
+                    { key: "b", text: "Đưa thừa số vào trong dấu căn của biểu thức $B$, ta được $B = \\sqrt{-18}$.", correct: false, exp: "Sai, vì $-3 < 0$ nên $-3\\sqrt{2} = -\\sqrt{(-3)^2 \\cdot 2} = -\\sqrt{18}$." },
+                    { key: "c", text: "Khử mẫu của biểu thức lấy căn $C$, ta thu được $C = \\frac{\\sqrt{5}}{3}$.", correct: true, exp: "Đúng, $\\sqrt{\\frac{5}{9}} = \\frac{\\sqrt{5}}{3}$." },
+                    { key: "d", text: "So sánh hai số $A$ và $3\\sqrt{2}$, ta có $A > 3\\sqrt{2}$.", correct: true, exp: "Đúng, $A = \\sqrt{27}$ và $3\\sqrt{2} = \\sqrt{18}$. Vì $27 > 18$ nên $A > 3\\sqrt{2}$." }
+                ]
+            },
+            {
+                id: "p2_2",
+                title: "Cho biểu thức $M = \\frac{3}{\\sqrt{7} - 2}$.",
+                items: [
+                    { key: "a", text: "Biểu thức liên hợp của mẫu số là $\\sqrt{7} + 2$.", correct: true, exp: "Đúng." },
+                    { key: "b", text: "Nhân cả tử và mẫu của $M$ với $\\sqrt{7} + 2$ ta được mẫu số bằng $5$.", correct: false, exp: "Sai, mẫu số mới là $7 - 4 = 3$." },
+                    { key: "c", text: "Sau khi trục căn thức ở mẫu, biểu thức $M$ rút gọn thành $\\sqrt{7} + 2$.", correct: true, exp: "Đúng, $M = \\frac{3(\\sqrt{7}+2)}{3} = \\sqrt{7}+2$." },
+                    { key: "d", text: "Giá trị của $M$ lớn hơn $4$.", correct: true, exp: "Đúng, vì $2 < \\sqrt{7} < 3 \\Rightarrow 4 < \\sqrt{7}+2 < 5$." }
+                ]
+            },
+            {
+                id: "p2_3",
+                title: "Xét các phép biến đổi căn thức với điều kiện $x > 0$:",
+                items: [
+                    { key: "a", text: "$\\sqrt{4x} = 2\\sqrt{x}$.", correct: true, exp: "Đúng." },
+                    { key: "b", text: "$\\frac{x}{\\sqrt{x}} = \\sqrt{x}$.", correct: true, exp: "Đúng." },
+                    { key: "c", text: "$x\\sqrt{\\frac{1}{x}} = 1$.", correct: false, exp: "Sai, $x\\sqrt{\\frac{1}{x}} = \\sqrt{\\frac{x^2}{x}} = \\sqrt{x}$." },
+                    { key: "d", text: "$\\frac{1}{\\sqrt{x} + 1} = \\frac{\\sqrt{x} - 1}{x - 1}$ (với $x \\ne 1$).", correct: true, exp: "Đúng." }
+                ]
+            },
+            {
+                id: "p2_4",
+                title: "Cho biểu thức $K = \\sqrt{12} + \\sqrt{27} - \\sqrt{48}$.",
+                items: [
+                    { key: "a", text: "Đưa các thừa số ra ngoài dấu căn: $\\sqrt{12} = 2\\sqrt{3}$, $\\sqrt{27} = 3\\sqrt{3}$, $\\sqrt{48} = 4\\sqrt{3}$.", correct: true, exp: "Đúng." },
+                    { key: "b", text: "Tất cả các căn thức sau khi biến đổi đều đồng dạng với $\\sqrt{3}$.", correct: true, exp: "Đúng." },
+                    { key: "c", text: "Rút gọn biểu thức $K$ ta được $K = 9\\sqrt{3}$.", correct: false, exp: "Sai, $K = (2 + 3 - 4)\\sqrt{3} = \\sqrt{3}$." },
+                    { key: "d", text: "Giá trị của $K^2$ bằng $3$.", correct: true, exp: "Đúng, $K^2 = (\\sqrt{3})^2 = 3$." }
+                ]
+            }
+        ];
+
+        const part3Data = [
+            {
+                id: "p3_1",
+                question: "Đưa thừa số vào trong dấu căn của biểu thức $4\\sqrt{3}$ thu được $\\sqrt{x}$. Tìm giá trị của $x$.",
+                correctAnswers: ["48"],
+                explanation: "$4\\sqrt{3} = \\sqrt{4^2 \\cdot 3} = \\sqrt{48} \\Rightarrow x = 48$."
+            },
+            {
+                id: "p3_2",
+                question: "Tính giá trị thu gọn của biểu thức $A = 3\\sqrt{8} - \\sqrt{50} + \\sqrt{2}$ dưới dạng $a\\sqrt{2}$. Cho biết $a$ bằng bao nhiêu?",
+                correctAnswers: ["2"],
+                explanation: "$A = 6\\sqrt{2} - 5\\sqrt{2} + \\sqrt{2} = 2\\sqrt{2} \\Rightarrow a = 2$."
+            },
+            {
+                id: "p3_3",
+                question: "Tìm giá trị nguyên của $a$ để mẫu số của biểu thức $\\frac{5}{\\sqrt{a} - 3}$ sau khi trục căn thức nhận giá trị bằng $7$.",
+                correctAnswers: ["16"],
+                explanation: "Trục căn thức ở mẫu ta được mẫu số mới là $a - 9$. Theo đề bài $a - 9 = 7 \\Rightarrow a = 16$."
+            },
+            {
+                id: "p3_4",
+                question: "Tính giá trị của biểu thức $B = (\\sqrt{5} + 2)(\\sqrt{5} - 2) + \\sqrt{\\frac{12}{3}}$.",
+                correctAnswers: ["3"],
+                explanation: "$B = (5 - 4) + \\sqrt{4} = 1 + 2 = 3$."
+            },
+            {
+                id: "p3_5",
+                question: "Cho biểu thức $P = \\frac{x - 4}{\\sqrt{x} + 2}$ với $x \\ge 0$. Tính giá trị của $P$ khi $x = 9$.",
+                correctAnswers: ["1"],
+                explanation: "Rút gọn $P = \\sqrt{x} - 2$. Với $x = 9 \\Rightarrow P = \\sqrt{9} - 2 = 1$."
+            }
+        ];
+
+        // Render UI
+        function renderQuiz() {
+            // Render Part 1
+            const p1Container = document.getElementById("part1Container");
+            p1Container.innerHTML = part1Data.map((q, idx) => `
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <p class="font-semibold text-slate-800 mb-4 latex-content"><span class="text-indigo-600 font-bold">Câu ${idx + 1}:</span> ${q.question}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        ${q.options.map((opt, oIdx) => `
+                            <label class="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-slate-50 transition border-slate-200">
+                                <input type="radio" name="${q.id}" value="${oIdx}" class="text-indigo-600 focus:ring-indigo-500 h-4 w-4">
+                                <span class="ml-3 text-sm text-slate-700 latex-content"><strong class="mr-1">${String.fromCharCode(65 + oIdx)}.</strong> ${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div id="exp_${q.id}" class="hidden mt-4 p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-sm text-indigo-900 latex-content"></div>
+                </div>
+            `).join('');
+
+            // Render Part 2
+            const p2Container = document.getElementById("part2Container");
+            p2Container.innerHTML = part2Data.map((q, idx) => `
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <p class="font-semibold text-slate-800 mb-4 latex-content"><span class="text-indigo-600 font-bold">Câu ${idx + 1}:</span> ${q.title}</p>
+                    <div class="space-y-3">
+                        ${q.items.map((item) => `
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 border rounded-lg border-slate-100 bg-slate-50/50 gap-2">
+                                <span class="text-sm text-slate-700 latex-content flex-grow"><strong class="text-indigo-600 mr-1">${item.key})</strong> ${item.text}</span>
+                                <div class="flex items-center gap-4 text-sm font-medium self-end sm:self-center">
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="${q.id}_${item.key}" value="true" class="text-emerald-600 focus:ring-emerald-500 h-4 w-4">
+                                        <span class="ml-1 text-emerald-700">Đúng</span>
+                                    </label>
+                                    <label class="flex items-center cursor-pointer">
+                                        <input type="radio" name="${q.id}_${item.key}" value="false" class="text-rose-600 focus:ring-rose-500 h-4 w-4">
+                                        <span class="ml-1 text-rose-700">Sai</span>
+                                    </label>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div id="exp_${q.id}" class="hidden mt-4 p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-sm text-indigo-900 latex-content"></div>
+                </div>
+            `).join('');
+
+            // Render Part 3
+            const p3Container = document.getElementById("part3Container");
+            p3Container.innerHTML = part3Data.map((q, idx) => `
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <p class="font-semibold text-slate-800 mb-3 latex-content"><span class="text-indigo-600 font-bold">Câu ${idx + 1}:</span> ${q.question}</p>
+                    <div class="flex items-center gap-3">
+                        <label class="text-sm font-medium text-slate-600">Đáp số:</label>
+                        <input type="text" id="${q.id}" placeholder="Nhập kết quả..." class="px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm max-w-xs">
+                    </div>
+                    <div id="exp_${q.id}" class="hidden mt-4 p-3 bg-indigo-50 border border-indigo-100 rounded-lg text-sm text-indigo-900 latex-content"></div>
+                </div>
+            `).join('');
+
+            // Re-render MathJax
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Grade Quiz
+        function submitQuiz() {
+            let correctCount = 0;
+            let totalQuestions = part1Data.length + part2Data.length + part3Data.length;
+
+            // Grade Part 1
+            part1Data.forEach(q => {
+                const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+                const expDiv = document.getElementById(`exp_${q.id}`);
+                expDiv.classList.remove('hidden');
+
+                if (selected && parseInt(selected.value) === q.correct) {
+                    correctCount++;
+                    expDiv.innerHTML = `<span class="font-bold text-emerald-600">Chính xác!</span> ${q.explanation}`;
+                } else {
+                    expDiv.innerHTML = `<span class="font-bold text-rose-600">Chưa đúng!</span> Đáp án đúng là <strong>${String.fromCharCode(65 + q.correct)}</strong>. ${q.explanation}`;
+                }
+            });
+
+            // Grade Part 2
+            part2Data.forEach(q => {
+                let allCorrect = true;
+                let expText = "<strong>Giải thích:</strong><br>";
+
+                q.items.forEach(item => {
+                    const selected = document.querySelector(`input[name="${q.id}_${item.key}"]:checked`);
+                    const val = selected ? (selected.value === 'true') : null;
+                    if (val !== item.correct) {
+                        allCorrect = false;
+                    }
+                    expText += `- Ý ${item.key}: <i>${item.correct ? 'Đúng' : 'Sai'}</i> - ${item.exp}<br>`;
+                });
+
+                const expDiv = document.getElementById(`exp_${q.id}`);
+                expDiv.classList.remove('hidden');
+                if (allCorrect) {
+                    correctCount++;
+                    expDiv.innerHTML = `<span class="font-bold text-emerald-600">Đúng hoàn toàn cả 4 ý!</span><br>${expText}`;
+                } else {
+                    expDiv.innerHTML = `<span class="font-bold text-rose-600">Chưa đúng tất cả các ý.</span><br>${expText}`;
+                }
+            });
+
+            // Grade Part 3
+            part3Data.forEach(q => {
+                const inputVal = document.getElementById(q.id).value.trim();
+                const expDiv = document.getElementById(`exp_${q.id}`);
+                expDiv.classList.remove('hidden');
+
+                if (q.correctAnswers.includes(inputVal)) {
+                    correctCount++;
+                    expDiv.innerHTML = `<span class="font-bold text-emerald-600">Chính xác!</span> ${q.explanation}`;
+                } else {
+                    expDiv.innerHTML = `<span class="font-bold text-rose-600">Chưa chính xác!</span> Đáp án đúng: <strong>${q.correctAnswers.join(' hoặc ')}</strong>. ${q.explanation}`;
+                }
+            });
+
+            // Calculate overall score (scale of 10)
+            const score = ((correctCount / totalQuestions) * 10).toFixed(1);
+
+            // Display Results Modal
+            document.getElementById("scoreDisplay").innerText = `${score} / 10`;
+            document.getElementById("correctCountDisplay").innerText = `${correctCount} / ${totalQuestions}`;
+            document.getElementById("resultModal").classList.remove('hidden');
+
+            // Scroll to Results
+            document.getElementById("resultModal").scrollIntoView({ behavior: 'smooth' });
+
+            // Re-render MathJax in explanations
+            if (window.MathJax) {
+                MathJax.typesetPromise();
+            }
+        }
+
+        // Reset Quiz
+        function resetForm() {
+            document.getElementById("quizForm").reset();
+            document.getElementById("resultModal").classList.add('hidden');
+            
+            // Hide explanations
+            const exps = document.querySelectorAll('[id^="exp_"]');
+            exps.forEach(e => e.classList.add('hidden'));
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize on load
+        window.onload = renderQuiz;
+    </script>
+</body>
+</html>
+```eof
+
+Tôi đã tạo toàn bộ bộ đề ôn tập Toán 9 dưới dạng một trang tương tác trực quan. Học sinh có thể làm bài trực tiếp trên giao diện Canvas, kiểm tra kết quả ngay lập tức và xem lời giải chi tiết cho từng câu.
